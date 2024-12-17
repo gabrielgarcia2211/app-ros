@@ -8,14 +8,15 @@
                     rounded
                     raised
                     @click="addProperty"
-                    style="margin-right: 10px"
+                    style="margin-right: 10px; background-color: #58b78f !important;"
                 />
                 <Button
                     icon="pi pi-filter-slash"
-                    class="p-button-danger p-button-sm"
+                    class="p-button-sm"
                     rounded
                     raised
                     @click="clearFilters"
+                    style="background-color: #58b78f !important;"
                 />
             </div>
             <DataTable
@@ -360,5 +361,52 @@ export default {
 .p-button-sm {
     font-size: 0.75rem;
     padding: 0.5rem 1rem;
+}
+
+span {
+    color: #3c3c3b;
+    font-weight: bold !important;
+    font-size: 1.25rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.p-card-title {
+    font-weight: bold !important;
+    font-size: 1.75rem !important;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.p-button-icon{
+    color: #ffff;
+}
+
+svg {
+    color: #58b78f !important;
+}
+
+
+.p-menubar-item-icon {
+    color: #58b78f !important;
+}
+
+.p-button-rounded {
+    background-color: #58b78f;
+}
+
+.p-datatable-filter-apply-button {
+    color: #ffff !important;
+}
+
+#name, #address {
+    color: #3c3c3b;
+    font-weight: bold !important;
+    font-size: 1.25rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+}
+
+h3 {
+    font-weight: bold !important;
+    font-size: 1.75rem !important;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 </style>
