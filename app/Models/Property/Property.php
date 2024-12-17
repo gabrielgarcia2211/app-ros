@@ -4,7 +4,7 @@ namespace App\Models\Property;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Configuration\MasterCombos;
+use App\Models\Configuration\EnumOption;
 
 class Property extends Model
 {
@@ -38,6 +38,6 @@ class Property extends Model
      */
     public function propertyType()
     {
-        return $this->belongsTo(MasterCombos::class, 'property_type_id');
+        return $this->belongsTo(EnumOption::class, 'property_type_id');
     }
 }

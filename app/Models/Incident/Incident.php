@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Property\Property;
 use App\Models\Provider\Provider;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Configuration\MasterCombos;
+use App\Models\Configuration\EnumOption;
 
 class Incident extends Model
 {
@@ -52,7 +52,7 @@ class Incident extends Model
      */
     public function status()
     {
-        return $this->belongsTo(MasterCombos::class, 'status_id');
+        return $this->belongsTo(EnumOption::class, 'status_id');
     }
 
     /**
@@ -60,7 +60,7 @@ class Incident extends Model
      */
     public function incidentType()
     {
-        return $this->belongsTo(MasterCombos::class, 'incident_type_id');
+        return $this->belongsTo(EnumOption::class, 'incident_type_id');
     }
 
     /**
@@ -68,7 +68,7 @@ class Incident extends Model
      */
     public function priority()
     {
-        return $this->belongsTo(MasterCombos::class, 'priority_id');
+        return $this->belongsTo(EnumOption::class, 'priority_id');
     }
 
     /**
@@ -76,6 +76,6 @@ class Incident extends Model
      */
     public function payer()
     {
-        return $this->belongsTo(MasterCombos::class, 'payer_id');
+        return $this->belongsTo(EnumOption::class, 'payer_id');
     }
 }

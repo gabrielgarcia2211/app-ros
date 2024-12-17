@@ -8,9 +8,11 @@ use App\Interfaces\User\UserRepositoryInterface;
 use App\Repositories\Property\PropertyRepository;
 use App\Repositories\Provider\ProviderRepository;
 use App\Repositories\Insurance\InsuranceRepository;
+use App\Repositories\EnumOption\EnumOptionRepository;
 use App\Interfaces\Property\PropertyRepositoryInterface;
 use App\Interfaces\Provider\ProviderRepositoryInterface;
 use App\Interfaces\Insurance\InsuranceRepositoryInterface;
+use App\Interfaces\EnumOption\EnumOptionRepositoryInterface;
 use App\Repositories\IncidentAction\IncidentActionRepository;
 use App\Interfaces\IncidentAction\IncidentActionRepositoryInterface;
 
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PropertyRepositoryInterface::class, PropertyRepository::class);
         $this->app->bind(InsuranceRepositoryInterface::class, InsuranceRepository::class);
         $this->app->bind(IncidentActionRepositoryInterface::class, IncidentActionRepository::class);
+        $this->app->bind(EnumOptionRepositoryInterface::class, EnumOptionRepository::class);
     }
 
     /**

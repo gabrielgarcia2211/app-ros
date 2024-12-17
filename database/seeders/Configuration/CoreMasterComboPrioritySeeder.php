@@ -45,11 +45,11 @@ class CoreMasterComboPrioritySeeder extends Seeder
             }
 
             # Creamos el padre y vinculamos los hijos
-            $father_id = DB::table('master_combos')->insertGetId($item);
+            $father_id = DB::table('enum_options')->insertGetId($item);
 
             if (!empty($temp_children)) {
                 foreach ($temp_children as $child) {
-                    DB::table('master_combos')->insert([
+                    DB::table('enum_options')->insert([
                         'parent_id' => $father_id,
                         'name' => $child['name'],
                         'orden' => $child['orden'],

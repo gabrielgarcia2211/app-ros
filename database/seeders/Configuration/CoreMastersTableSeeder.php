@@ -4,7 +4,7 @@ namespace Database\Seeders\Configuration;
 
 use Illuminate\Database\Seeder;
 use App\Models\Economics\Opcion;
-use App\Models\Configuration\MasterCombos;
+use App\Models\Configuration\EnumOption;
 
 class CoreMastersTableSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class CoreMastersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        MasterCombos::create(
+        EnumOption::create(
             [ #Maestro ID: 1
                 'parent_id' => 1, #1
                 'name' => 'master padre',

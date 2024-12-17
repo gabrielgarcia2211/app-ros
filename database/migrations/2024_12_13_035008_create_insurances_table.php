@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('property_id')->references('id')->on('properties');
-            $table->foreign('coverage_type_id')->references('id')->on('master_combos');
+            $table->foreign('coverage_type_id')->references('id')->on('enum_options');
         });
     }
 

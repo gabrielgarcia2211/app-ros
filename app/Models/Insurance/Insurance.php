@@ -4,7 +4,7 @@ namespace App\Models\Insurance;
 
 use App\Models\Property\Property;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Configuration\MasterCombos;
+use App\Models\Configuration\EnumOption;
 
 class Insurance extends Model
 {
@@ -31,6 +31,6 @@ class Insurance extends Model
      */
     public function coverageType()
     {
-        return $this->belongsTo(MasterCombos::class, 'coverage_type_id');
+        return $this->belongsTo(EnumOption::class, 'coverage_type_id');
     }
 }

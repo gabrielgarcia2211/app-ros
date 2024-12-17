@@ -25,10 +25,10 @@ return new class extends Migration
             $table->unsignedInteger('payer_id');
             $table->timestamps();
 
-            $table->foreign('status_id')->references('id')->on('master_combos');
-            $table->foreign('incident_type_id')->references('id')->on('master_combos');
-            $table->foreign('priority_id')->references('id')->on('master_combos');
-            $table->foreign('payer_id')->references('id')->on('master_combos');
+            $table->foreign('status_id')->references('id')->on('enum_options');
+            $table->foreign('incident_type_id')->references('id')->on('enum_options');
+            $table->foreign('priority_id')->references('id')->on('enum_options');
+            $table->foreign('payer_id')->references('id')->on('enum_options');
 
             $table->foreign('property_id')->references('id')->on('properties');
             $table->foreign('reported_by')->references('id')->on('users');

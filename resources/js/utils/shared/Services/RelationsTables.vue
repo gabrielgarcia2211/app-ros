@@ -1,5 +1,12 @@
 <script>
 export default {
-    methods: {},
+    methods: {
+        $relationTableProperty(selector) {
+            switch (selector) {
+                default:
+                    return selector;
+            }
+        },
+    },
 };
 </script>

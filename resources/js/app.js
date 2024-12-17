@@ -12,6 +12,10 @@ const app = createApp({});
 import NavBarComponent from './components/layout/NavbarComponent.vue';
 app.component('navbar-component', NavBarComponent);
 
+// importacion de properties
+import PropertyComponent from './components/property/PropertyComponent.vue';
+app.component('property-component', PropertyComponent);
+
 import Aura from "@primevue/themes/aura";
 import "primeicons/primeicons.css";
 

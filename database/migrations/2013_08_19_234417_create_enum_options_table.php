@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMasterCombosTable extends Migration
+class CreateEnumOptionsTable extends Migration
 {
     public function up()
     {
-        Schema::create('master_combos', function (Blueprint $table) {
+        Schema::create('enum_options', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id')->unsigned();
             $table->string('code')->index()->unique()->nullable();
@@ -22,7 +22,7 @@ class CreateMasterCombosTable extends Migration
             $table->integer('orden')->default(-1);
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('parent_id')->references('id')->on('master_combos')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('parent_id')->references('id')->on('enum_options')->onUpdate('cascade')->onDelete('cascade');
         });
 
 
@@ -30,6 +30,6 @@ class CreateMasterCombosTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('master_combos');
+        Schema::dropIfExists('enum_options');
     }
 }

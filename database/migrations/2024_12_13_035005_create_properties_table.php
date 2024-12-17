@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->foreign('owner_id')->references('id')->on('users');
             $table->foreign('tenant_id')->references('id')->on('users');
-            $table->foreign('property_type_id')->references('id')->on('master_combos');
+            $table->foreign('property_type_id')->references('id')->on('enum_options');
         });
     }
 
