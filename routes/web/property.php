@@ -8,4 +8,6 @@ Route::prefix('properties')->middleware(['auth'])->group(function () {
     Route::post('/store', [PropertyController::class, 'store'])->name('properties.store');
     Route::post('/update/{id}', [PropertyController::class, 'update'])->name('properties.update');
     Route::delete('/{id}', [PropertyController::class, 'destroy'])->name('properties.destroy');
+    Route::post('/photo/add/', [PropertyController::class, 'addPhoto'])->name('properties.destroy.add');
+    Route::post('/photo/delete/', [PropertyController::class, 'destroyPhoto'])->name('properties.destroy.photo');
 });

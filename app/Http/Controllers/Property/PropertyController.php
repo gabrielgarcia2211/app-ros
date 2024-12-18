@@ -55,6 +55,8 @@ class PropertyController extends Controller
             $property = $this->propertyService->storeProperty($request->all());
             return Response::sendResponse($property, 'Registro creado con exito.');
         } catch (\Exception $ex) {
+            Log::info($ex->getLine());
+            Log::info($ex->getMessage());
             return Response::sendError('Ocurrio un error inesperado al intentar procesar la solicitud', 500);
         }
     }
@@ -65,6 +67,8 @@ class PropertyController extends Controller
             $property = $this->propertyService->showProperty($id);
             return Response::sendResponse($property, 'Registro obtenido con exito.');
         } catch (\Exception $ex) {
+            Log::info($ex->getLine());
+            Log::info($ex->getMessage());
             return Response::sendError('Ocurrio un error inesperado al intentar procesar la solicitud', 500);
         }
     }
@@ -75,6 +79,8 @@ class PropertyController extends Controller
             $property = $this->propertyService->updateProperty($request->all(), $id);
             return Response::sendResponse($property, 'Registro actualizado con exito.');
         } catch (\Exception $ex) {
+            Log::info($ex->getLine());
+            Log::info($ex->getMessage());
             return Response::sendError('Ocurrio un error inesperado al intentar procesar la solicitud', 500);
         }
     }
@@ -83,6 +89,28 @@ class PropertyController extends Controller
     {
         try {
             $this->propertyService->deleteProperty($id);
+            return Response::sendResponse(true, 'Registro eliminado con exito.');
+        } catch (\Exception $ex) {
+            Log::info($ex->getLine());
+            Log::info($ex->getMessage());
+            return Response::sendError('Ocurrio un error inesperado al intentar procesar la solicitud', 500);
+        }
+    }
+
+    public function addPhoto(Request $request)
+    {
+        try {
+            $photo = $this->propertyService->addPhotoProperty($request->all());
+            return Response::sendResponse($photo, 'Registro eliminado con exito.');
+        } catch (\Exception $ex) {
+            return Response::sendError('Ocurrio un error inesperado al intentar procesar la solicitud', 500);
+        }
+    }
+
+    public function destroyPhoto(Request $request)
+    {
+        try {
+            $this->propertyService->deletePhotoProperty($request->all());
             return Response::sendResponse(true, 'Registro eliminado con exito.');
         } catch (\Exception $ex) {
             return Response::sendError('Ocurrio un error inesperado al intentar procesar la solicitud', 500);

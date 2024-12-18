@@ -23,28 +23,28 @@ class Property extends Model
     public function getPhotoAttribute($value)
     {
         if ($value) {
-            return Storage::disk('disk_ownership')->url($value);
+            return Storage::disk('disk_property')->url($value);
         }
     }
 
     public function getPhoto1Attribute($value)
     {
         if ($value) {
-            return Storage::disk('disk_ownership')->url($value);
+            return Storage::disk('disk_property')->url($value);
         }
     }
 
     public function getPhoto2Attribute($value)
     {
         if ($value) {
-            return Storage::disk('disk_ownership')->url($value);
+            return Storage::disk('disk_property')->url($value);
         }
     }
 
     public function getPhoto3Attribute($value)
     {
         if ($value) {
-            return Storage::disk('disk_ownership')->url($value);
+            return Storage::disk('disk_property')->url($value);
         }
     }
 

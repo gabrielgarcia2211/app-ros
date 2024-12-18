@@ -90,3 +90,15 @@ function getQueryValue($operator, $value)
             return $value;
     }
 }
+
+function cleanStorageUrl($url, $path = '/storage_property/')
+{
+    $url = trim($url);
+    $basePath = $path;
+    $position = strpos($url, $basePath);
+    if ($position === false) {
+        return $url;
+    }
+    $cleanedUrl = substr($url, $position + strlen($basePath));
+    return $cleanedUrl;
+}

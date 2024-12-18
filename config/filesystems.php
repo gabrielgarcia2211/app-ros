@@ -57,6 +57,13 @@ return [
             'throw' => false,
         ],
 
+        'disk_property' => [
+            'driver' => 'local',
+            'root' => storage_path('app/storage_property'),
+            'url' => env('APP_URL') . '/storage_property',
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*
@@ -72,13 +79,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-    ],
-
-    'disk_property' => [
-        'driver' => 'local',
-        'root' => storage_path('app/storage_property'),
-        'url' => env('APP_URL') . '/storage_property',
-        'visibility' => 'public',
+        public_path('storage_property') => storage_path('app/storage_property'),
     ],
 
 ];

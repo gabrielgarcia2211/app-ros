@@ -3,8 +3,10 @@
 namespace App\Services\Property;
 
 use App\Models\Property\Property;
+use App\Services\File\FileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Interfaces\Property\PropertyRepositoryInterface;
 use App\Interfaces\UserProperty\UserPropertyRepositoryInterface;
 
@@ -15,8 +17,9 @@ class PropertyService
     protected $userPropertyRepository;
     protected $fileService;
 
-    public function __construct(PropertyRepositoryInterface $propertyRepository, UserPropertyRepositoryInterface $userPropertyRepository)
+    public function __construct(PropertyRepositoryInterface $propertyRepository, UserPropertyRepositoryInterface $userPropertyRepository, FileService $fileService)
     {
+        $this->fileService = $fileService;
         $this->propertyRepository = $propertyRepository;
         $this->userPropertyRepository = $userPropertyRepository;
     }
@@ -47,6 +50,10 @@ class PropertyService
                 'properties.status',
                 'eo_property_type.id',
                 'eo_property_type.name',
+                'properties.photo',
+                'properties.photo1',
+                'properties.photo2',
+                'properties.photo3',
             ]);
 
         return $query->distinct();
@@ -56,9 +63,13 @@ class PropertyService
     {
         DB::beginTransaction();
         try {
+            $photos = $data['photos'];
+            unset($data['photo']);
             $owners = $data['owners'];
             $tenants = $data['tenants'];
             $property = $this->propertyRepository->create($data);
+            $this->assignedPhoto($property, $photos);
+            $property->save();
             foreach ($owners as $key => $value) {
                 $this->userPropertyRepository->create([
                     'property_id' => $property->id,
@@ -136,5 +147,82 @@ class PropertyService
             Log::info($ex->getMessage());
             throw $ex;
         }
+    }
+
+    private function assignedPhoto(&$property, $photos)
+    {
+        if (isset($photos[0])) {
+            $property->photo = $this->fileService->saveFile($photos[0], 'photo', 'disk_property');
+        }
+        if (isset($photos[1])) {
+            $property->photo1 = $this->fileService->saveFile($photos[1], 'photo', 'disk_property');
+        }
+        if (isset($photos[2])) {
+            $property->photo2 = $this->fileService->saveFile($photos[2], 'photo', 'disk_property');
+        }
+        if (isset($photos[3])) {
+            $property->photo3 = $this->fileService->saveFile($photos[3], 'photo', 'disk_property');
+        }
+    }
+
+    public function addPhotoProperty($data)
+    {
+        $flagColumn = null;
+        $property = $this->propertyRepository->findById($data['property_id']);
+        $columns = ['photo', 'photo1', 'photo2', 'photo3'];
+        foreach ($columns as $column) {
+            if (empty($property->{$column})) {
+                $property->{$column} = $this->fileService->saveFile($data['photo'], 'photo', 'disk_property');
+                $flagColumn = $property->{$column};
+                $property->save();
+                break;
+            }
+        }
+        return $flagColumn;
+    }
+
+    public function deletePhotoProperty($data)
+    {
+        try {
+            $matchingColumn = $this->findPhotoColumn($data['property_id'], $data['photo']);
+            if ($matchingColumn) {
+                if ($this->fileService->deleteFile(cleanStorageUrl($matchingColumn[1][$matchingColumn[0]], '/storage_property/'), 'disk_property')) {
+                    Property::where('id', $data['property_id'])->update([
+                        $matchingColumn[0] => null
+                    ]);
+                }
+            }
+            return true;
+        } catch (\Exception $ex) {
+            Log::info($ex->getLine());
+            Log::info($ex->getMessage());
+            throw $ex;
+        }
+    }
+
+    private function findPhotoColumn($id, $photo)
+    {
+        $filename = basename($photo);
+        $property = Property::where('id', $id)
+            ->where(function ($query) use ($filename) {
+                $query->where('photo', 'LIKE', "%$filename%")
+                    ->orWhere('photo1', 'LIKE', "%$filename%")
+                    ->orWhere('photo2', 'LIKE', "%$filename%")
+                    ->orWhere('photo3', 'LIKE', "%$filename%");
+            })
+            ->first();
+
+        if (!$property) {
+            return null;
+        }
+
+        $columns = ['photo', 'photo1', 'photo2', 'photo3'];
+        foreach ($columns as $column) {
+            if ($property->$column == $photo) {
+                return [$column, $property->toArray()];
+            }
+        }
+
+        return null;
     }
 }
