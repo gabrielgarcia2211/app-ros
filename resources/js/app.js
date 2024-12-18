@@ -19,6 +19,8 @@ app.component('property-component', PropertyComponent);
 import Aura from "@primevue/themes/aura";
 import "primeicons/primeicons.css";
 
+import ProgressSpinner from 'primevue/progressspinner';
+
 app.use(PrimeVue, {
     theme: {
         preset: Aura,
@@ -29,6 +31,8 @@ app.use(PrimeVue, {
         },
     },
 });
+
+app.component("ProgressSpinner", ProgressSpinner);
 
 // Registrar funciones compartidas
 app.mixin(shared.AlertsComponent);
