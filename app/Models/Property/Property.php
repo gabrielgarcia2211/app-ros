@@ -4,6 +4,7 @@ namespace App\Models\Property;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Configuration\EnumOption;
 
 class Property extends Model
@@ -12,30 +13,41 @@ class Property extends Model
         'name',
         'address',
         'status',
-        'owner_id',
-        'tenant_id',
-        'property_type_id'
+        'property_type_id',
+        'photo',
+        'photo1',
+        'photo2',
+        'photo3',
     ];
 
-    /**
-     * Relación: Propiedad - Dueño (owner_id)
-     */
-    public function owner()
+    public function getPhotoAttribute($value)
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        if ($value) {
+            return Storage::disk('disk_ownership')->url($value);
+        }
     }
 
-    /**
-     * Relación: Propiedad - Inquilino (tenant_id)
-     */
-    public function tenant()
+    public function getPhoto1Attribute($value)
     {
-        return $this->belongsTo(User::class, 'tenant_id');
+        if ($value) {
+            return Storage::disk('disk_ownership')->url($value);
+        }
     }
 
-    /**
-     * Relación: Propiedad - Tipo de propiedad (property_type_id)
-     */
+    public function getPhoto2Attribute($value)
+    {
+        if ($value) {
+            return Storage::disk('disk_ownership')->url($value);
+        }
+    }
+
+    public function getPhoto3Attribute($value)
+    {
+        if ($value) {
+            return Storage::disk('disk_ownership')->url($value);
+        }
+    }
+
     public function propertyType()
     {
         return $this->belongsTo(EnumOption::class, 'property_type_id');

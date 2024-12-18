@@ -16,13 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('status');
-            $table->unsignedBigInteger('owner_id');
-            $table->unsignedBigInteger('tenant_id');
+            $table->string('photo')->nullable();
+            $table->string('photo1')->nullable();
+            $table->string('photo2')->nullable();
+            $table->string('photo3')->nullable();
             $table->unsignedInteger('property_type_id');
             $table->timestamps();
 
-            $table->foreign('owner_id')->references('id')->on('users');
-            $table->foreign('tenant_id')->references('id')->on('users');
             $table->foreign('property_type_id')->references('id')->on('enum_options');
         });
     }

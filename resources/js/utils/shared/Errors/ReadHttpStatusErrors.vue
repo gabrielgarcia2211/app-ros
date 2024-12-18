@@ -1,7 +1,7 @@
 <script>
 const readStatus = {};
 
-// Funcion para obtener los datos del error de las respuesta http
+// Function to get error details from HTTP responses
 readStatus.getDataError = (error = []) => {
     let response = {};
     try {
@@ -10,7 +10,7 @@ readStatus.getDataError = (error = []) => {
         response = {};
     }
     return response;
-}
+};
 
 readStatus.validateForm = (data) => {
     const errors = data.errors;
@@ -23,7 +23,7 @@ readStatus.validateForm = (data) => {
         });
         return messages;
     }
-}
+};
 
 export default {
     methods: {
@@ -32,44 +32,44 @@ export default {
 
             switch (response.status) {
                 case 400:
-                    this.$alertDanger('Solicitud Incorrecta', response.data.message);
+                    this.$alertDanger('Bad Request', response.data.message);
                     break;
                 case 401:
-                    this.$alertDanger('Tu sesión expiró', "");
+                    this.$alertDanger('Your session has expired', "");
                     setTimeout(() => window.location.href = "/", 2000);
                     break;
                 case 402:
-                    this.$alertDanger('Solicitud Incorrecta');
+                    this.$alertDanger('Bad Request');
                     break;
                 case 403:
-                    this.$alertDanger('Proceso denegado', 'No tienes permiso para realizar este proceso');
+                    this.$alertDanger('Process Denied', 'You do not have permission to perform this process');
                     break;
                 case 404:
-                    this.$alertDanger('Solicitud Incorrecta');
+                    this.$alertDanger('Bad Request');
                     break;
                 case 406:
-                    this.$alertDanger('Solicitud Incorrecta');
+                    this.$alertDanger('Bad Request');
                     break;
                 case 409:
-                    this.$alertDanger('Proceso no autorizado', 'El proceso no fue autorizado, intente con otro tipo de proceso');
+                    this.$alertDanger('Unauthorized Process', 'The process was not authorized. Try another type of process.');
                     break;
                 case 419:
-                    this.$alertDanger('Tu sesión expiró', "");
+                    this.$alertDanger('Your session has expired', "");
                     setTimeout(() => window.location.href = "/", 2000);
                     break;
                 case 422:
-                    this.$alertDanger('Error de formulario', readStatus.validateForm(response.data));
+                    this.$alertDanger('Form Error', readStatus.validateForm(response.data));
                     break;
                 case 423:
-                    this.$alertDanger('Limite Excedido');
+                    this.$alertDanger('Limit Exceeded');
                     break;
                 case 500:
-                    this.$alertDanger('Solicitud Incorrecta', 'Ocurrió un error al realizar el proceso');
+                    this.$alertDanger('Bad Request', 'An error occurred while performing the process');
                     break;
                 default:
-                    this.$alertDanger('Solicitud Incorrecta', 'Ocurrió un error inesperado');
+                    this.$alertDanger('Bad Request', 'An unexpected error occurred');
             }
         }
     }
-}
+};
 </script>

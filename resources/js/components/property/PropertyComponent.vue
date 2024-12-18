@@ -8,7 +8,10 @@
                     rounded
                     raised
                     @click="addProperty"
-                    style="margin-right: 10px; background-color: #58b78f !important;"
+                    style="
+                        margin-right: 10px;
+                        background-color: #58b78f !important;
+                    "
                 />
                 <Button
                     icon="pi pi-filter-slash"
@@ -16,7 +19,7 @@
                     rounded
                     raised
                     @click="clearFilters"
-                    style="background-color: #58b78f !important;"
+                    style="background-color: #58b78f !important"
                 />
             </div>
             <DataTable
@@ -83,52 +86,16 @@
                     style="min-width: 120px"
                 >
                     <template #body="{ data }">
-                        {{ data.status }}
+                        {{ $formatStatus(data.status) }}
                     </template>
                     <template #filter="{ filterModel }">
-                        <InputText
+                        <Select
+                            :options="statuses"
                             v-model="filterModel.value"
-                            type="text"
-                            class="p-column-filter"
-                            placeholder="Search by status"
-                        />
-                    </template>
-                </Column>
-                <!-- Owner Name Column -->
-                <Column
-                    field="owner_name"
-                    header="Owner Name"
-                    sortable
-                    style="min-width: 150px"
-                >
-                    <template #body="{ data }">
-                        {{ data.owner_name }}
-                    </template>
-                    <template #filter="{ filterModel }">
-                        <InputText
-                            v-model="filterModel.value"
-                            type="text"
-                            class="p-column-filter"
-                            placeholder="Search by owner name"
-                        />
-                    </template>
-                </Column>
-                <!-- Tenant Name Column -->
-                <Column
-                    field="tenant_name"
-                    header="Tenant Name"
-                    sortable
-                    style="min-width: 150px"
-                >
-                    <template #body="{ data }">
-                        {{ data.tenant_name }}
-                    </template>
-                    <template #filter="{ filterModel }">
-                        <InputText
-                            v-model="filterModel.value"
-                            type="text"
-                            class="p-column-filter"
-                            placeholder="Search by tenant name"
+                            placeholder="Select status"
+                            optionLabel="value"
+                            optionValue="id"
+                            style="width: 100%"
                         />
                     </template>
                 </Column>
@@ -151,6 +118,93 @@
                         />
                     </template>
                 </Column>
+                <!-- Owner Name Column -->
+                <Column
+                    field="owners_name"
+                    header="Owner Name"
+                    sortable
+                    style="min-width: 150px"
+                >
+                    <template #body="{ data }">
+                        <div class="size-tags">
+                            <Tag
+                                v-for="index in $parseTags(data.owners_name)"
+                                :key="index.id"
+                                :value="`${index.tag}`"
+                                class="size-tag"
+                            />
+                        </div>
+                    </template>
+                </Column>
+                <!-- Tenant Name Column -->
+                <Column
+                    field="tenants_name"
+                    header="Tenant Name"
+                    sortable
+                    style="min-width: 150px"
+                >
+                    <template #body="{ data }">
+                        <div class="size-tags">
+                            <Tag
+                                v-for="index in $parseTags(data.tenants_name)"
+                                :key="index.id"
+                                :value="`${index.tag}`"
+                                class="size-tag"
+                            />
+                        </div>
+                    </template>
+                </Column>
+                <!-- Photos Column -->
+                <Column header="Photo">
+                    <template #body="{ data }">
+                        <div style="text-align: center">
+                            <Galleria
+                                :key="galleryKey"
+                                :value="$getImages(data)"
+                                :numVisible="4"
+                                style="width: 900px"
+                                containerClass="custom-galleria"
+                                :showThumbnails="true"
+                                showIndicators
+                                circular
+                                autoPlay
+                                :transitionInterval="5000"
+                            >
+                                <template #item="{ item }">
+                                    <Image
+                                        :src="item"
+                                        class="w-full h-full object-cover cursor-pointer"
+                                        height="100px"
+                                        width="150px"
+                                        preview
+                                    />
+                                </template>
+                            </Galleria>
+                        </div>
+                    </template>
+                </Column>
+                <!-- Actions Column -->
+                <Column
+                    header="Actions"
+                    style="min-width: 120px; text-align: center"
+                >
+                    <template #body="slotProps">
+                        <div class="row">
+                            <Button
+                                icon="pi pi-pencil"
+                                class="p-button-rounded p-button-primary"
+                                style="margin: 5px"
+                                @click="editProperty(slotProps.data)"
+                            />
+                            <Button
+                                icon="pi pi-trash"
+                                class="p-button-rounded p-button-danger"
+                                style="margin: 5px"
+                                @click="deleteProperty(slotProps.data.id)"
+                            />
+                        </div>
+                    </template>
+                </Column>
             </DataTable>
         </template>
     </Card>
@@ -170,10 +224,15 @@
 import Card from "primevue/card";
 import { FilterMatchMode, FilterOperator } from "@primevue/core/api";
 import ManagemenPropertyComponent from "./management/ManagemenPropertyComponent.vue";
-import InputText from 'primevue/inputtext';
+import InputText from "primevue/inputtext";
 import DataTable from "primevue/datatable";
+import Galleria from "primevue/galleria";
+import Select from "primevue/select";
 import Column from "primevue/column";
 import Button from "primevue/button";
+import Image from "primevue/image";
+import Tag from "primevue/tag";
+
 
 export default {
     props: [],
@@ -191,6 +250,11 @@ export default {
             //
             selectedProperty: null,
             dialogVisible: false,
+            statuses: [
+                { value: "Active", id: 1 },
+                { value: "Inactive", id: 2 },
+            ],
+            galleryKey: 0,
         };
     },
     components: {
@@ -201,7 +265,11 @@ export default {
         DataTable,
         Column,
         Button,
-        InputText
+        InputText,
+        Tag,
+        Select,
+        Galleria,
+        Image
     },
     created() {
         this.initFilters();
@@ -226,8 +294,11 @@ export default {
                 },
                 status: {
                     clear: false,
+                    filterOptions: {
+                        showFilterMenu: false,
+                    },
                     constraints: [
-                        { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+                        { value: null, matchMode: FilterMatchMode.EQUALS },
                     ],
                 },
                 owner_name: {
@@ -271,6 +342,7 @@ export default {
             this.filtroInfo = [];
             for (const [key, filter] of Object.entries(event.filters)) {
                 if (filter.constraints) {
+                    console.log(filter.constraints);
                     for (const constraint of filter.constraints) {
                         if (constraint.value) {
                             this.filtroInfo.push([
@@ -310,11 +382,11 @@ export default {
             this.selectedProperty = null;
             this.dialogVisible = true;
         },
-        editAliado(aliado) {
+        editProperty(aliado) {
             this.selectedProperty = aliado;
             this.dialogVisible = true;
         },
-        async deleteAliado(aliadoId) {
+        async deleteProperty(aliadoId) {
             const result = await this.$swal.fire({
                 title: "Are you sure?",
                 text: "You are about to delete this ally. Are you sure you want to continue?",
@@ -329,7 +401,7 @@ export default {
             if (result.isConfirmed) {
                 try {
                     await axios.delete(`/properties/${aliadoId}`);
-                    this.$alertSuccess("Aliado eliminado con éxito");
+                    this.$alertSuccess("Register delete");
                     this.fetchProperty();
                 } catch (error) {
                     this.$readStatusHttp(error);
@@ -343,7 +415,7 @@ export default {
         },
         hidden(status) {
             this.dialogVisible = status;
-        }
+        },
     },
 };
 </script>
@@ -367,23 +439,24 @@ span {
     color: #3c3c3b;
     font-weight: bold !important;
     font-size: 1.25rem;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
 }
 
 .p-card-title {
     font-weight: bold !important;
     font-size: 1.75rem !important;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
 }
 
-.p-button-icon{
+.p-button-icon {
     color: #ffff;
 }
 
 svg {
     color: #58b78f !important;
 }
-
 
 .p-menubar-item-icon {
     color: #58b78f !important;
@@ -397,16 +470,19 @@ svg {
     color: #ffff !important;
 }
 
-#name, #address {
+#name,
+#address {
     color: #3c3c3b;
     font-weight: bold !important;
     font-size: 1.25rem;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif !important;
 }
 
 h3 {
     font-weight: bold !important;
     font-size: 1.75rem !important;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
 }
 </style>

@@ -29,3 +29,17 @@
     align-items: center;
     justify-content: space-between;
 }
+
+.size-tags {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.size-tag {
+    padding: 8px !important;
+    margin: 3px;
+}
+
+.swal2-container {
+    z-index: 9999 !important;
+}
