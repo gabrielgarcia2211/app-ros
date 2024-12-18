@@ -216,7 +216,6 @@ class PropertyService
         if (!$property) {
             return null;
         }
-
         $columns = $this->listPhotos;
         foreach ($columns as $column) {
             if ($property->$column == $photo) {
