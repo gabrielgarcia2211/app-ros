@@ -486,7 +486,7 @@ export default {
                     .then((response) => {
                         this.$alertSuccess("Photo add!");
                         this.formProperty.photos[index] = response.data.data;
-                        this.$emit("reload", true);
+                        this.$emit("reloadTable", true);
                     })
                     .catch((error) => {
                         this.$readStatusHttp(error);
@@ -503,7 +503,7 @@ export default {
                 .then((response) => {
                     this.$alertSuccess("Photo deleted!");
                     this.formProperty.photos.splice(index, 1);
-                    this.$emit("reload", true);
+                    this.$emit("reloadTable", true);
                 })
                 .catch((error) => {
                     this.$readStatusHttp(error);

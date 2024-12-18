@@ -16,6 +16,7 @@ class PropertyService
     protected $propertyRepository;
     protected $userPropertyRepository;
     protected $fileService;
+    private $listPhotos = ['photo', 'photo1', 'photo2', 'photo3'];
 
     public function __construct(PropertyRepositoryInterface $propertyRepository, UserPropertyRepositoryInterface $userPropertyRepository, FileService $fileService)
     {
@@ -169,7 +170,7 @@ class PropertyService
     {
         $flagColumn = null;
         $property = $this->propertyRepository->findById($data['property_id']);
-        $columns = ['photo', 'photo1', 'photo2', 'photo3'];
+        $columns = $this->listPhotos;
         foreach ($columns as $column) {
             if (empty($property->{$column})) {
                 $property->{$column} = $this->fileService->saveFile($data['photo'], 'photo', 'disk_property');
@@ -216,13 +217,12 @@ class PropertyService
             return null;
         }
 
-        $columns = ['photo', 'photo1', 'photo2', 'photo3'];
+        $columns = $this->listPhotos;
         foreach ($columns as $column) {
             if ($property->$column == $photo) {
                 return [$column, $property->toArray()];
             }
         }
-
         return null;
     }
 }

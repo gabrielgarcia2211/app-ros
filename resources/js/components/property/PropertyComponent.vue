@@ -215,6 +215,7 @@
         :selectedProperty="selectedProperty"
         @hidden="hidden"
         @reload="reload"
+        @reloadTable="reloadTable"
     />
 </template>
 
@@ -232,7 +233,6 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Image from "primevue/image";
 import Tag from "primevue/tag";
-
 
 export default {
     props: [],
@@ -269,7 +269,7 @@ export default {
         Tag,
         Select,
         Galleria,
-        Image
+        Image,
     },
     created() {
         this.initFilters();
@@ -412,6 +412,13 @@ export default {
             this.fetchProperty();
             this.selectedProperty = null;
             this.dialogVisible = false;
+        },
+        reloadTable() {
+            this.fetchProperty();
+            this.resetGallery();
+        },
+        resetGallery() {
+            this.galleryKey += 1;
         },
         hidden(status) {
             this.dialogVisible = status;
